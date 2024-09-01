@@ -1,4 +1,3 @@
-
 import fs from "fs";
 import { Command } from "commander";
 import path from "path";
@@ -10,7 +9,7 @@ const TODOS_FILE = path.join(process.cwd(), "todos.json");
 program
   .name("Todoer")
   .description(
-    "The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow."
+    "The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.",
   )
   .version("0.1.0");
 
@@ -34,7 +33,8 @@ program
     const todo = {
       id: todos.length + 1,
       task: task,
-      done: false,
+      status: true,
+      isCompleted: false,
     };
     todos.push(todo);
     if (writeTodo(todos)) console.log(chalk.green(`Added new Task : ${task}`));
@@ -66,7 +66,8 @@ program
       console.log(chalk.yellow("Todo List is empty! Add some todos..."));
     } else {
       todos.forEach((todo, i) => {
-        console.log(`${todo.id} ${todo.task}`);
+        if (todo.status)
+          console.log(`${todo.id} ${todo.task} ${chalk.green("✔")}`);
       });
     }
   });
