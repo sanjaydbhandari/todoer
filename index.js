@@ -27,23 +27,27 @@ const removeChalkColor=(color)=>{
 }
 
 const response = (todo) =>{
+    let priority = todo.priority=="High"?chalk.red(todo.priority):chalk.yellow(todo.priority);
     if (todo.status == "Completed")
-      console.log(chalk.green(`[${chalk.green("✔")} ] ${todo.id} : ${todo.task}`));
+      console.log(chalk.green(`[ ${priority} ] [${chalk.green("✔")} ] ${todo.id} : ${todo.task}`));
     else if(todo.status == "InProgress")
-        console.log(chalk.yellow(`[--] ${todo.id} : ${todo.task}`));
-    else console.log(`[  ] ${todo.id} : ${todo.task}`);
+        console.log(chalk.yellow(`[ ${priority} ] [--] ${todo.id} : ${todo.task}`));
+    else console.log(`[ ${priority} ] [  ] ${todo.id} : ${todo.task}\n`);
 }
 
 const listTodos = () =>{
     const todos = readTodos();
     let deleted = false;
-    todos.forEach((todo, i) => {
-      if(!todo.deleted){
-          response(todo);
-          deleted=true;
-      }        
-    });
-    if(!deleted) console.log(chalk.yellow("Todo List is empty! Add some todos..."));    
+    if(todos.length>0){
+      todos.forEach((todo, i) => {
+        if(!todo.deleted){
+            response(todo);
+            deleted=true;
+        }        
+      });
+    }
+    
+    if(!deleted) console.log(chalk.italic.blueBright("Todo List is empty! Add some todos...")); 
 }
 
 const editTodos = (id, task) => {
@@ -70,7 +74,7 @@ program
     inquirer.prompt([
       {        
         type: "input",
-        name : "todo",
+        name : "task",
         message : chalk.bold.white("Enter a new Todo :")
       },
       {
@@ -105,17 +109,16 @@ program
         id: todos.length + 1,
         task: removeChalkColor(ans.task),
         priority: removeChalkColor(ans.priority),
-        status: ans.status,
+        status: removeChalkColor(ans.status),
         deadline: ans.deadline,
         created_at: Date.now(),
         updated_at: null,
       };
 
-      console.log(todo);
-    // todos.push(todo);
-    // if (writeTodo(todos)) console.log(chalk.green(`Added new Task : ${task}`));
-    // else console.log(chalk.red(`Failed to add Task : ${task}`));      
-    // listTodos();
+      todos.push(todo);
+      if (writeTodo(todos)) console.log(chalk.italic.green(`New Task Added Succussfully : ${todo.task}`));
+      else console.log(chalk.red(`Failed to add Task : ${todo.task}`));      
+      listTodos();
     })                        
   });
 
