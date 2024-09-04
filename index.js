@@ -50,14 +50,28 @@ const listTodos = () =>{
     if(!deleted) console.log(chalk.italic.blueBright("Todo List is empty! Add some todos...")); 
 }
 
-const editTodos = (id, task) => {
+// const editTodos = (id, task) => {
+//   const todos = readTodos();
+//   let editTodo = todos.find((todo)=> todos.id = id);
+//   if(editTodo){
+//     editTodo.task = task;
+//     console.log(chalk.italic.green(`Todo [ ${id} : ${task} ] edited succussfully`))
+//   }
+//   else console.log(chalk.italic.red(`Failed to edit Task! id ${id} not found`))
+// }
+
+const editTodos = (todo) => {
   const todos = readTodos();
-  let editTodo = todos.find((todo)=> todos.id = id);
+  let editTodo = todos.find((todo)=> todos.id = todo.id);
   if(editTodo){
-    editTodo.task = task;
-    console.log(`Todo [ ${id} : ${task} ] edited succussfully`)
+    editTodo.task = todo.task;
+    editTodo.status = todo.status;
+    editTodo.priority = todo.priority;
+    editTodo.deadline = todo.deadline;
+    editTodo.updated_at = Date.now();
+    console.log(chalk.italic.green(`Todo [ ${id} : ${task} ] edited succussfully`))
   }
-  else console.log(`Failed to edit Task! id ${id} not found`)
+  else console.log(chalk.italic.red(`Failed to edit Task! id ${id} not found`))
 }
 
 const writeTodo = (todo) => {
@@ -65,6 +79,7 @@ const writeTodo = (todo) => {
   return true;
 };
 
+// add todo
 program
   .command("add")
   .description("add todos")
@@ -122,6 +137,68 @@ program
     })                        
   });
 
+  // edit todo
+  program
+  .command("ch")
+  .description("edit todo")
+  .action(() => {
+    console.log(chalk.grey('Todo List :'))
+    listTodos();
+    inquirer.prompt([
+      {        
+        type: "input",
+        name : "id",
+        message : chalk.bold.white("Enter a Todo ID :")
+      },
+      {        
+        type: "input",
+        name : "task",
+        message : chalk.bold.white("Enter a new Todo :")
+      },
+      {
+        type: "list",
+        name: "priority",
+        message: chalk.bold.white("select the task priority :"),
+        choices:[
+          chalk.red("High"),
+          chalk.hex('#b100cd')("Medium"),
+          chalk.hex('#4c00b0')("low"),
+        ]
+      },
+      {
+        type: "list",
+        name: "status",
+        message: chalk.bold.white("select the task status :"),
+        choices:[
+          chalk.green("Completed"),
+          chalk.yellow("InProgress"),
+          chalk.bold("OnHold"),
+        ]
+      },
+      {        
+        type: "input",
+        name : "deadline",
+        message : chalk.bold.white("Enter a task's deadline :")
+      }
+    ]) 
+    .then((ans)=>{
+      const todos = readTodos();
+      let edited = false;
+      todos.map((todo)=>{
+        if(todo.id==ans.id){
+          todo.task= removeChalkColor(ans.task)
+          todo.priority= removeChalkColor(ans.priority)
+          todo.status= removeChalkColor(ans.status)
+          todo.deadline= ans.deadline
+          todo.updated_at= Date.now()
+          edited=true;
+        }
+      });
+      if (edited) {writeTodo(todos);console.log(chalk.italic.green(`New Task Edited Succussfully`));}
+      else console.log(chalk.red(`ID ${ans.id} Not Found! Failed to Edit Task` ));      
+      listTodos();
+    })                        
+  });
 
 // program
 //   .command("add <task>")
@@ -158,8 +235,8 @@ program
         });
         writeTodo(todos);
     } 
-    if(deleted)console.log(chalk.green(`Task [ ${deletedTodo.id} : ${deletedTodo.task} ] Deleted Succussfully`));
-    else console.log(chalk.red(`invalid id! todo not found...`));
+    if(deleted)console.log(chalk.italic.green(`Task [ ${deletedTodo.id} : ${deletedTodo.task} ] Deleted Succussfully`));
+    else console.log(chalk.italic.red(`invalid id! todo not found...`));
   });
 
   program
@@ -172,7 +249,7 @@ program
     }
   );
   writeTodo(todos);
-  console.log(chalk.green(`All Task Deleted Succussfully!`));
+  console.log(chalk.italic.green(`All Task Deleted Succussfully!`));
 });
 
 program
@@ -189,7 +266,7 @@ program
       inquirer.prompt([{
         type: "list",
         name: "filter",
-        message: chalk.yellow("Which task want to list?"),
+        message: chalk.bold("Which task want to list?"),
         choices:[
           chalk.green("Completed"),
           chalk.yellow("InProgress"),
