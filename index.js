@@ -15,6 +15,8 @@ program
   )
   .version("0.1.0");
 
+  // ------------functions---------------------
+
 const readTodos = () => {
   if (!fs.existsSync(TODOS_FILE)) return [];
 
@@ -27,7 +29,7 @@ const removeChalkColor=(color)=>{
 }
 
 const response = (todo) =>{
-    let priority = todo.priority=="High"?chalk.red(todo.priority):chalk.yellow(todo.priority);
+    let priority = todo.priority=="High"?chalk.red(todo.priority):chalk.blue(todo.priority);
     if (todo.status == "Completed")
       console.log(chalk.green(`[ ${priority} ] [${chalk.green("✔")} ] ${todo.id} : ${todo.task}`));
     else if(todo.status == "InProgress")
@@ -50,36 +52,12 @@ const listTodos = () =>{
     if(!deleted) console.log(chalk.italic.blueBright("Todo List is empty! Add some todos...")); 
 }
 
-// const editTodos = (id, task) => {
-//   const todos = readTodos();
-//   let editTodo = todos.find((todo)=> todos.id = id);
-//   if(editTodo){
-//     editTodo.task = task;
-//     console.log(chalk.italic.green(`Todo [ ${id} : ${task} ] edited succussfully`))
-//   }
-//   else console.log(chalk.italic.red(`Failed to edit Task! id ${id} not found`))
-// }
-
-const editTodos = (todo) => {
-  const todos = readTodos();
-  let editTodo = todos.find((todo)=> todos.id = todo.id);
-  if(editTodo){
-    editTodo.task = todo.task;
-    editTodo.status = todo.status;
-    editTodo.priority = todo.priority;
-    editTodo.deadline = todo.deadline;
-    editTodo.updated_at = Date.now();
-    console.log(chalk.italic.green(`Todo [ ${id} : ${task} ] edited succussfully`))
-  }
-  else console.log(chalk.italic.red(`Failed to edit Task! id ${id} not found`))
-}
-
 const writeTodo = (todo) => {
   fs.writeFileSync(TODOS_FILE, JSON.stringify(todo));
   return true;
 };
 
-// add todo
+// add todo --------------------------------------------
 program
   .command("add")
   .description("add todos")
@@ -98,8 +76,8 @@ program
         message: chalk.bold.white("select the task priority :"),
         choices:[
           chalk.red("High"),
-          chalk.hex('#b100cd')("Medium"),
-          chalk.hex('#4c00b0')("low"),
+          chalk.yellow("Medium"),
+          chalk.cyan("low"),
         ]
       },
       {
@@ -108,7 +86,7 @@ program
         message: chalk.bold.white("select the task status :"),
         choices:[
           chalk.green("Completed"),
-          chalk.yellow("InProgress"),
+          chalk.blue("InProgress"),
           chalk.bold("OnHold"),
         ]
       },
@@ -128,6 +106,7 @@ program
         deadline: ans.deadline,
         created_at: Date.now(),
         updated_at: null,
+        deleted: false
       };
 
       todos.push(todo);
@@ -137,7 +116,26 @@ program
     })                        
   });
 
-  // edit todo
+  // edit todo ------------------------------------------
+
+  program
+.command("edit <id> <task>")
+  .description("list all todos")
+  .action((id,task ) => {
+    const todos = readTodos();
+    let edited = false;
+    todos.map((todo)=>{
+      if(todo.id==id && todo.deleted == false){
+        todo.task= task,
+        todo.updated_at= Date.now()
+        edited=true;
+      }
+    });
+    if (edited) {writeTodo(todos);console.log(chalk.italic.green(`Task Edited Succussfully`));}
+    else console.log(chalk.red(`ID ${id} Not Found! Failed to Edit Task` ));      
+    listTodos();
+  });
+
   program
   .command("ch")
   .description("edit todo")
@@ -161,8 +159,8 @@ program
         message: chalk.bold.white("select the task priority :"),
         choices:[
           chalk.red("High"),
-          chalk.hex('#b100cd')("Medium"),
-          chalk.hex('#4c00b0')("low"),
+          chalk.blue("Medium"),
+          chalk.cyan("low"),
         ]
       },
       {
@@ -185,7 +183,7 @@ program
       const todos = readTodos();
       let edited = false;
       todos.map((todo)=>{
-        if(todo.id==ans.id){
+        if(todo.id==ans.id && todo.deleted == false){
           todo.task= removeChalkColor(ans.task)
           todo.priority= removeChalkColor(ans.priority)
           todo.status= removeChalkColor(ans.status)
@@ -194,7 +192,7 @@ program
           edited=true;
         }
       });
-      if (edited) {writeTodo(todos);console.log(chalk.italic.green(`New Task Edited Succussfully`));}
+      if (edited) {writeTodo(todos);console.log(chalk.italic.green(`Task Edited Succussfully`));}
       else console.log(chalk.red(`ID ${ans.id} Not Found! Failed to Edit Task` ));      
       listTodos();
     })                        
@@ -217,6 +215,7 @@ program
 //     listTodos();                          
 //   });
 
+//  delete todo---------------------------------
 program
   .command("del <id>")
   .description("Delete todos")
@@ -243,14 +242,33 @@ program
   .command("DEL")
   .description("Delete all todos")
   .action(() => {
-    let todos = readTodos();
-    todos.map((todo) => {
-      todo.deleted = true;
-    }
-  );
-  writeTodo(todos);
-  console.log(chalk.italic.green(`All Task Deleted Succussfully!`));
+    inquirer.prompt([
+      {
+        type: "list",
+        name: "confirm",
+        message: chalk.bold.white("Are you sure! Do you wnat to delete? :"),
+        choices:[
+          chalk.grey("No"),
+          chalk.red("Yes"),
+        ]
+      }
+    ])
+    .then((ans)=>{
+      if(ans.confirm == removeChalkColor("Yes")){
+        let todos = readTodos();
+        todos.map((todo) => {
+          todo.deleted = true;
+        })
+        writeTodo(todos);
+        console.log(chalk.italic.green(`All Task Deleted Succussfully!`));
+      }else{
+        console.log(chalk.italic.red(`Failed to Deleted All Task!`));
+      }
+    })
+
 });
+
+// list todo----------------------------------
 
 program
   .command("ls")
@@ -287,13 +305,5 @@ program
       })
 
   });
-
-program
-.command("edit <id> <task>")
-  .description("list all todos")
-  .action((id,task ) => {
-    editTodos(id,task)
-  });
-  
 
 program.parse(process.argv);

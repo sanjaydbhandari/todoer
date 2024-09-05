@@ -1,1 +1,2 @@
-[{"id":1,"task":"hello","priority":"High","status":"Completed","deadline":"sdf","created_at":1725390752289,"updated_at":null},{"id":"2","task":"sdfsd","priority":"\u001b[38;2;177;0;205mMedium","status":"InProgress","deadline":"123","created_at":1725427353072,"updated_at":1725428455152}]
+[{"id":1,"task":"121hello","priority":"Medium","status":"InProgress","deadline":"12121","created_at":1725514946946,"updated_at":1725516311415,"deleted":false},
+{"id":2,"task":"hello","priority":"Medium","status":"Completed","deadline":"12121","created_at":1725515028544,"updated_at":1725516300516,"deleted":false}]
