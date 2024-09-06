@@ -1,13 +1,26 @@
-
-# todoer
+# Todoer
 The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.
 
-### **Usage: Todoer [options] [command]**
+## Installation
+To install Todoer, run the following command:
 
+```bash
+npm install -g todoer
+```
+ 
+### License
+
+This project is licensed under the MIT License.
+
+<br>
+
+
+### **Usage: todoer [options] [command]**
+* * * * *
 -   **Usage** defines how the user should run the CLI tool.
     -   `Todoer`: This is the name of the CLI tool.
     -   `[options]`: These are optional flags or options the user can provide (like `--version`, `--help`, etc.).
-    -   `[command]`: These are the commands that perform specific actions (like `add`, `edit`, `rm`).
+    -   `[command]`: These are the commands that perform specific actions (like `add`, `edit`, `rm` ,`del`,`list`).
 
 ### 2\. **Description of the Tool**
 
@@ -42,14 +55,17 @@ The todoer CLI command project is user-friendly command-line interface tool desi
         ```bash
         todoer add
         ```
+        <br>
+        
 
-    -   **`-e <id> <task>`**: This is a shorthand way to edit a todo using the ID of the task and the new task description.
+    -   **`ch <id> <task>`**: This is a shorthand way to edit a todo using the ID of the task and the new task description.
 
         Example:
 
         ```bash
-        todoer -e 1 "Complete assignment"
+        todoer ch 1 "Complete assignment"
         ```
+        <br>
 
     -   **`edit`**: Edits an existing todo. This may take further arguments like ID and new task description, task priority, tast status, task deadline.
 
@@ -58,6 +74,7 @@ The todoer CLI command project is user-friendly command-line interface tool desi
         ```bash
         todoer edit
         ```
+        <br>
 
     -   **`rm <id>`**: Removes (deletes) a todo by its ID.
 
@@ -66,6 +83,7 @@ The todoer CLI command project is user-friendly command-line interface tool desi
         ```bash
         todoer rm 1
         ```
+        <br>
 
     -   **`del`**: Deletes **all** todos. This is a bulk delete command.
 
@@ -74,6 +92,7 @@ The todoer CLI command project is user-friendly command-line interface tool desi
         ```bash
         todoer del
         ```
+        <br>
 
     -   **`ls`**: Lists all todos.
 
@@ -82,14 +101,16 @@ The todoer CLI command project is user-friendly command-line interface tool desi
         ```bash
         todoer ls
         ```
+        <br>
 
-    -   **`list`**: Lists todos using some sort of filter. This command might support various filtering options like Done | InProgress | onHold 
+    -   **`list`**: Lists todos using some sort of filter. This command might support various filtering options like Completed | InProgress | onHold 
 
         Example:
 
         ```bash
         todoer list
         ```
+        <br>
 
     -   **`h`**: This likely shows the available commands. It's a shorthand for help.
 
@@ -98,14 +119,7 @@ The todoer CLI command project is user-friendly command-line interface tool desi
         ```bash
         todoer h
         ```
-
-    -   **`help [command]`**: This command displays help for a specific command.
-
-        Example:
-
-        ```bash
-        todoer help add
-        ```
+        <br>
 
 * * * * *
 
@@ -114,39 +128,58 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 1.  **Add a task**:
 
     ```bash
-    todoer add "Buy groceries"
+    todoer add
     ```
+    <br>
 
-2.  **Edit a task by ID**:
+
+2.  **Edit a task**:
+    ```bash
+    todoer ch 1 "Go to the gym"
+    ```
+    <br>
+
+3.  **Shorthand way to Edit a task by ID**:
 
     ```bash
-    todoer -e 1 "Go to the gym"
+    todoer ch 1 "Go to the gym"
     ```
+    <br>
 
-3.  **Remove a task by ID**:
+4.  **Remove a task by ID**:
 
     ```bash
     todoer rm 1
     ```
+    <br>
 
-4.  **Delete all tasks**:
+5.  **Delete all tasks**:
 
     ```bash
     todoer del
     ```
+    <br>
 
-5.  **List all tasks**:
+6.  **List all tasks**:
 
     ```bash
     todoer ls
     ```
+    <br>
 
-6.  **Display help**:
+7.  **List tasks with Filter (Completed/Inprogress/onHold)**:
+
+    ```bash
+     todoer list
+    ```
+     <br>
+     
+8.  **Display help**:
 
     ```bash
     todoer --help
-    todoer help add
     ```
+    <br>
 
 ### Summary
 
