@@ -1,3 +1,8 @@
+
+# Project Title
+
+A brief description of what this project does and who it's for
+
 # todoer
 The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.
 
@@ -24,7 +29,9 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 
     Example:
 
-    text `todoer --version`
+    ```bash
+     todoer --version
+    ```
 
 ### 4\. **Commands**
 
@@ -36,55 +43,73 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 
         Example:
 
-        `todoer add "Complete homework"`
+        ```bash
+        todoer add "Complete homework"
+        ```
 
     -   **`-e <id> <task>`**: This is a shorthand way to edit a todo using the ID of the task and the new task description.
 
         Example:
 
-        `todoer -e 1 "Complete assignment"`
+        ```bash
+        todoer -e 1 "Complete assignment"
+        ```
 
     -   **`edit`**: Edits an existing todo. This may take further arguments like ID and new task description, task priority, tast status, task deadline.
 
         Example:
 
-        `todoer edit`
+        ```bash
+        todoer edit
+        ```
 
     -   **`rm <id>`**: Removes (deletes) a todo by its ID.
 
         Example:
 
-        `todoer rm 1`
+        ```bash
+        todoer rm 1
+        ```
 
     -   **`del`**: Deletes **all** todos. This is a bulk delete command.
 
         Example:
 
-        `todoer del`
+        ```bash
+        todoer del
+        ```
 
     -   **`ls`**: Lists all todos.
 
         Example:
 
-        `todoer ls`
+        ```bash
+        todoer ls
+        ```
 
     -   **`list`**: Lists todos using some sort of filter. This command might support various filtering options like Done | InProgress | onHold 
 
         Example:
 
-        `todoer list`
+        ```bash
+        todoer list
+        ```
 
     -   **`h`**: This likely shows the available commands. It's a shorthand for help.
 
         Example:
 
-        `todoer h`
+        ```bash
+        todoer h
+        ```
 
     -   **`help [command]`**: This command displays help for a specific command.
 
         Example:
 
-        `todoer help add`
+        ```bash
+        todoer help add
+        ```
 
 * * * * *
 
@@ -92,28 +117,40 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 
 1.  **Add a task**:
 
-    `todoer add "Buy groceries"`
+    ```bash
+    todoer add "Buy groceries"
+    ```
 
 2.  **Edit a task by ID**:
 
-    `todoer -e 1 "Go to the gym"`
+    ```bash
+    todoer -e 1 "Go to the gym"
+    ```
 
 3.  **Remove a task by ID**:
 
-    `todoer rm 1`
+    ```bash
+    todoer rm 1
+    ```
 
 4.  **Delete all tasks**:
 
-    `todoer del`
+    ```bash
+    todoer del
+    ```
 
 5.  **List all tasks**:
 
-    `todoer ls`
+    ```bash
+    todoer ls
+    ```
 
 6.  **Display help**:
 
-    `todoer --help
-    todoer help add`
+    ```bash
+    todoer --help
+    todoer help add
+    ```
 
 ### Summary
 
