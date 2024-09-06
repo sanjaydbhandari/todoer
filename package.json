@@ -3,12 +3,19 @@
   "description": "The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.",
   "version": "0.1.0",
   "main": "index.js",
+  "bin": {
+    "todoer": "./index.js"
+  },
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "todoer",
-    "cli"
+    "cli",
+    "task",
+    "command line",
+    "management"
   ],
   "author": "sanjay bhandari",
   "license": "MIT",
@@ -20,6 +27,10 @@
     "inquirer": "^10.2.0",
     "path": "^0.12.7",
     "todoer": "file:"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
   },
   "type": "module"
 }

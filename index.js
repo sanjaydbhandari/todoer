@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fs from "fs";
 import { Command } from "commander";
 import path from "path";
@@ -15,11 +17,11 @@ program
   )
   .version("0.1.0");
 
+// ------------functions---------------------
+
 function padString(str, targetLength) {
   return str.padEnd(targetLength, " ");
 }
-
-// ------------functions---------------------
 
 const readTodos = () => {
   if (!fs.existsSync(TODOS_FILE)) return [];
@@ -35,17 +37,17 @@ const removeChalkColor = (color) => {
 const response = (todo) => {
   let priority =
     todo.priority == "High"
-      ? chalk.red(todo.priority)
-      : chalk.blue(todo.priority);
+      ? chalk.red("*H*")
+      : chalk.blue(todo.priority.substring(0,3));
   if (todo.status == "Completed")
     console.log(
       chalk.green(
-        `[ ${typeof priority} ] [${chalk.green("✔")} ] ${todo.id} : ${todo.task}`,
+        `[ ${priority} ] [${chalk.green("✔")} ] ${todo.id} : ${todo.task}`,
       ),
     );
   else if (todo.status == "InProgress")
     console.log(chalk.yellow(`[ ${priority} ] [--] ${todo.id} : ${todo.task}`));
-  else console.log(`[ ${priority} ] [  ] ${todo.id} : ${todo.task}\n`);
+  else console.log(`[ ${priority} ] [  ] ${todo.id} : ${todo.task}`);
 };
 
 const listTodos = () => {
@@ -103,7 +105,7 @@ program
           choices: [
             chalk.green("Completed"),
             chalk.blue("InProgress"),
-            chalk.bold("OnHold"),
+            chalk.white.bold("OnHold"),
           ],
         },
         {
@@ -138,7 +140,7 @@ program
 // edit todo ------------------------------------------
 
 program
-  .command("-e <id> <task>")
+  .command("ch <id> <task>")
   .description("Shorthand Edit todo using ID")
   .action((id, task) => {
     const todos = readTodos();
@@ -187,7 +189,7 @@ program
           choices: [
             chalk.green("Completed"),
             chalk.yellow("InProgress"),
-            chalk.bold("OnHold"),
+            chalk.white.bold("OnHold"),
           ],
         },
         {
@@ -228,9 +230,8 @@ program
     let deleted = false;
     let deletedTodo;
     if (id > 0 && id <= todos.length) {
-      console.log(todos);
       todos.map((todo, todoId) => {
-        if (todo.id === Number(id)) {
+        if (todo.id === Number(id) && todo.deleted == false) {
           deletedTodo = todo;
           todo.deleted = true;
           deleted = true;
@@ -296,7 +297,7 @@ program
           choices: [
             chalk.green("Completed"),
             chalk.yellow("InProgress"),
-            chalk.bold("OnHold"),
+            chalk.white.bold("OnHold"),
           ],
         },
       ])
@@ -315,22 +316,19 @@ program
       });
   });
 
-program
-  .command("h")
-  .description("display the commands")
-  .action(() => {
-    displayHelp();
-  });
-
 program.on("command:*", () => {
-  console.error(chalk.red("Invalid Command!"));
   displayHelp();
+  console.error(chalk.red("Invalid Command!"));
   process.exit(1);
 });
 
 function displayHelp() {
   console.log("\n");
   console.log(chalk.green(figlet.textSync("Todoer")));
+  console.log(chalk.grey("Description:"));
+  console.log(chalk.white("The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.\n"));
+  console.log(chalk.grey("Options:"));
+  console.log(chalk.yellow(padString("-V, --version", 23)) + " Display the version number\n");
   console.log(chalk.grey("Commands:"));
   console.log(chalk.yellow(padString("todoer ls", 23)) + " List all todos");
   console.log(
@@ -339,21 +337,23 @@ function displayHelp() {
   console.log(chalk.yellow(padString("todoer add", 23)) + " Add a new todo");
   console.log(chalk.yellow(padString("todoer edit", 23)) + " Edit todo by ID");
   console.log(
+    chalk.yellow(padString("todoer ch <id> <task>", 23)) +
+    " ShortHand way to edit todo",
+  );
+  console.log(
     chalk.yellow(padString("todoer rm <id>", 23)) + " Delete/Remove todo by ID",
   );
   console.log(chalk.yellow(padString("todoer del", 23)) + " Delete all todos");
-  console.log(
-    chalk.yellow(padString("todoer -e <id> <task>", 23)) +
-      " ShortHand way to edit todo",
-  );
+  
+  console.log(chalk.yellow(padString("todoer h", 23)) + " Display the commands");
+  console.log(chalk.yellow(padString("todoer help", 23)) + " Display help for command");
 }
 
 const args = process.argv.slice(2);
 
-if (args.includes('--help') || args.includes('-h') || args.includes(' ')) {
+if (args.includes('--help') || args.includes('help') || args.includes('h') || args.includes('-h')  || args.length === 0) {
     displayHelp(); // Display the custom help message
     process.exit(0); // Exit after showing the help message
 }
-displayHelp();
 program.helpOption(false);
 program.parse(process.argv);
