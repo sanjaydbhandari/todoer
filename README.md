@@ -36,55 +36,55 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 
         Example:
 
-        bash : `todoer add "Complete homework"`
+        `todoer add "Complete homework"`
 
     -   **`-e <id> <task>`**: This is a shorthand way to edit a todo using the ID of the task and the new task description.
 
         Example:
 
-        bash : `todoer -e 1 "Complete assignment"`
+        `todoer -e 1 "Complete assignment"`
 
-    -   **`edit`**: Edits an existing todo. (This may take further arguments like ID and new task description, but it's not clear in this output.)
+    -   **`edit`**: Edits an existing todo. This may take further arguments like ID and new task description, task priority, tast status, task deadline.
 
         Example:
 
-        bash : `todoer edit 1 "Update task"`
+        `todoer edit`
 
     -   **`rm <id>`**: Removes (deletes) a todo by its ID.
 
         Example:
 
-        bash : `todoer rm 1`
+        `todoer rm 1`
 
     -   **`del`**: Deletes **all** todos. This is a bulk delete command.
 
         Example:
 
-        bash : `todoer del`
+        `todoer del`
 
     -   **`ls`**: Lists all todos.
 
         Example:
 
-        bash : `todoer ls`
+        `todoer ls`
 
-    -   **`list`**: Lists todos using some sort of filter. This command might support various filtering options like incomplete tasks, due dates, etc.
+    -   **`list`**: Lists todos using some sort of filter. This command might support various filtering options like Done | InProgress | onHold 
 
         Example:
 
-        bash : `todoer list --filter incomplete`
+        `todoer list`
 
     -   **`h`**: This likely shows the available commands. It's a shorthand for help.
 
         Example:
 
-        bash : `todoer h`
+        `todoer h`
 
     -   **`help [command]`**: This command displays help for a specific command.
 
         Example:
 
-        bash : `todoer help add`
+        `todoer help add`
 
 * * * * *
 
@@ -92,27 +92,27 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 
 1.  **Add a task**:
 
-    bash : `todoer add "Buy groceries"`
+    `todoer add "Buy groceries"`
 
 2.  **Edit a task by ID**:
 
-    bash : `todoer -e 1 "Go to the gym"`
+    `todoer -e 1 "Go to the gym"`
 
 3.  **Remove a task by ID**:
 
-    bash : `todoer rm 1`
+    `todoer rm 1`
 
 4.  **Delete all tasks**:
 
-    bash : `todoer del`
+    `todoer del`
 
 5.  **List all tasks**:
 
-    bash : `todoer ls`
+    `todoer ls`
 
 6.  **Display help**:
 
-    bash : `todoer --help
+    `todoer --help
     todoer help add`
 
 ### Summary
