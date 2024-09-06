@@ -27,6 +27,10 @@ const readTodos = () => {
   if (!fs.existsSync(TODOS_FILE)) return [];
 
   const data = fs.readFileSync(TODOS_FILE, "utf8");
+  if (data.length == 0) {
+    fs.writeFileSync(TODOS_FILE, JSON.stringify([]));
+    return [];
+  }
   return JSON.parse(data);
 };
 
@@ -38,7 +42,7 @@ const response = (todo) => {
   let priority =
     todo.priority == "High"
       ? chalk.red("*H*")
-      : chalk.blue(todo.priority.substring(0,3));
+      : chalk.blue(todo.priority.substring(0, 3));
   if (todo.status == "Completed")
     console.log(
       chalk.green(
@@ -53,7 +57,8 @@ const response = (todo) => {
 const listTodos = () => {
   const todos = readTodos();
   let deleted = false;
-  if (todos.length > 0) {
+  if (todos.length > 0 && todos !== "[]") {
+    console.log(chalk.grey("Check Below Todoer's TodoList:"));
     todos.forEach((todo, i) => {
       if (!todo.deleted) {
         response(todo);
@@ -63,14 +68,14 @@ const listTodos = () => {
   }
 
   if (!deleted)
-    console.log(
-      chalk.italic.blueBright("Todo List is empty! Add some todos..."),
-    );
+    console.log(chalk.italic.red("Todo List is empty! Add some todos..."));
 };
 
 const writeTodo = (todo) => {
-  fs.writeFileSync(TODOS_FILE, JSON.stringify(todo));
-  return true;
+  if (todo) {
+    fs.writeFileSync(TODOS_FILE, JSON.stringify(todo));
+    return true;
+  }
 };
 
 // add todo --------------------------------------------
@@ -145,17 +150,19 @@ program
   .action((id, task) => {
     const todos = readTodos();
     let edited = false;
-    todos.map((todo) => {
-      if (todo.id == id && todo.deleted == false) {
-        (todo.task = task), (todo.updated_at = Date.now());
-        edited = true;
-      }
-    });
+    if (todos !== "[]") {
+      todos.map((todo) => {
+        if (todo.id == id && todo.deleted == false) {
+          (todo.task = task), (todo.updated_at = Date.now());
+          edited = true;
+        }
+      });
+    }
     if (edited) {
       writeTodo(todos);
       console.log(chalk.italic.green(`Task Edited Succussfully`));
+      listTodos();
     } else console.log(chalk.red(`ID ${id} Not Found! Failed to Edit Task`));
-    listTodos();
   });
 
 program
@@ -201,22 +208,24 @@ program
       .then((ans) => {
         const todos = readTodos();
         let edited = false;
-        todos.map((todo) => {
-          if (todo.id == ans.id && todo.deleted == false) {
-            todo.task = removeChalkColor(ans.task);
-            todo.priority = removeChalkColor(ans.priority);
-            todo.status = removeChalkColor(ans.status);
-            todo.deadline = ans.deadline;
-            todo.updated_at = Date.now();
-            edited = true;
-          }
-        });
+        if (todos !== "[]") {
+          todos.map((todo) => {
+            if (todo.id == ans.id && todo.deleted == false) {
+              todo.task = removeChalkColor(ans.task);
+              todo.priority = removeChalkColor(ans.priority);
+              todo.status = removeChalkColor(ans.status);
+              todo.deadline = ans.deadline;
+              todo.updated_at = Date.now();
+              edited = true;
+            }
+          });
+        }
         if (edited) {
           writeTodo(todos);
           console.log(chalk.italic.green(`Task Edited Succussfully`));
+          listTodos();
         } else
           console.log(chalk.red(`ID ${ans.id} Not Found! Failed to Edit Task`));
-        listTodos();
       });
   });
 
@@ -226,26 +235,39 @@ program
   .command("rm <id>")
   .description("Delete todos by ID")
   .action((id) => {
-    let todos = readTodos();
-    let deleted = false;
-    let deletedTodo;
-    if (id > 0 && id <= todos.length) {
-      todos.map((todo, todoId) => {
-        if (todo.id === Number(id) && todo.deleted == false) {
-          deletedTodo = todo;
-          todo.deleted = true;
-          deleted = true;
-        }
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "confirm",
+          message: chalk.bold.white("Are you sure! Do you want to delete? :"),
+          choices: [chalk.grey("No"), chalk.red("Yes")],
+        },
+      ])
+      .then((ans) => {
+        if (removeChalkColor(ans.confirm) == "Yes") {
+          let todos = readTodos();
+          let deleted = false;
+          let deletedTodo;
+          if (id > 0 && id <= todos.length && todos !== "[]") {
+            todos.map((todo, todoId) => {
+              if (todo.id === Number(id) && todo.deleted == false) {
+                deletedTodo = todo;
+                todo.deleted = true;
+                deleted = true;
+              }
+            });
+            writeTodo(todos);
+          }
+          if (deleted)
+            console.log(
+              chalk.italic.green(
+                `Task [ ${deletedTodo.id} : ${deletedTodo.task} ] Deleted Succussfully`,
+              ),
+            );
+          else console.log(chalk.italic.red(`invalid id! todo not found...`));
+        } else console.log(chalk.italic.red(`invalid id! todo not found...`));
       });
-      writeTodo(todos);
-    }
-    if (deleted)
-      console.log(
-        chalk.italic.green(
-          `Task [ ${deletedTodo.id} : ${deletedTodo.task} ] Deleted Succussfully`,
-        ),
-      );
-    else console.log(chalk.italic.red(`invalid id! todo not found...`));
   });
 
 program
@@ -257,16 +279,18 @@ program
         {
           type: "list",
           name: "confirm",
-          message: chalk.bold.white("Are you sure! Do you wnat to delete? :"),
+          message: chalk.bold.white("Are you sure! Do you want to delete? :"),
           choices: [chalk.grey("No"), chalk.red("Yes")],
         },
       ])
       .then((ans) => {
-        if (ans.confirm == removeChalkColor("Yes")) {
+        if (removeChalkColor(ans.confirm) == "Yes") {
           let todos = readTodos();
-          todos.map((todo) => {
-            todo.deleted = true;
-          });
+          if (todos !== "[]") {
+            todos.map((todo) => {
+              todo.deleted = true;
+            });
+          }
           writeTodo(todos);
           console.log(chalk.italic.green(`All Task Deleted Succussfully!`));
         } else {
@@ -305,12 +329,14 @@ program
         let todos = readTodos();
         let deleted = false;
         let status = ans.filter.replace(/\x1B\[\d+m/g, "");
-        todos.forEach((todo) => {
-          if (!todo.deleted && todo.status == status) {
-            response(todo);
-            deleted = true;
-          }
-        });
+        if (todos.length > 0 && todos !== "[]") {
+          todos.forEach((todo) => {
+            if (!todo.deleted && todo.status == status) {
+              response(todo);
+              deleted = true;
+            }
+          });
+        }
         if (!deleted)
           console.log(chalk.red("Todo List is empty! Add some todos..."));
       });
@@ -324,11 +350,18 @@ program.on("command:*", () => {
 
 function displayHelp() {
   console.log("\n");
-  console.log(chalk.green(figlet.textSync("Todoer")));
+  console.log(chalk.greenBright.bold(figlet.textSync("Todoer")));
   console.log(chalk.grey("Description:"));
-  console.log(chalk.white("The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.\n"));
+  console.log(
+    chalk.white(
+      "The todoer CLI command project is user-friendly command-line interface tool designed to manage your todo tasks efficiently. With todoer, you can easily create, read, update, and delete tasks directly from your terminal, streamlining your productivity workflow.\n",
+    ),
+  );
   console.log(chalk.grey("Options:"));
-  console.log(chalk.yellow(padString("-V, --version", 23)) + " Display the version number\n");
+  console.log(
+    chalk.yellow(padString("-V, --version", 23)) +
+      " Display the version number\n",
+  );
   console.log(chalk.grey("Commands:"));
   console.log(chalk.yellow(padString("todoer ls", 23)) + " List all todos");
   console.log(
@@ -338,22 +371,33 @@ function displayHelp() {
   console.log(chalk.yellow(padString("todoer edit", 23)) + " Edit todo by ID");
   console.log(
     chalk.yellow(padString("todoer ch <id> <task>", 23)) +
-    " ShortHand way to edit todo",
+      " ShortHand way to edit todo",
   );
   console.log(
     chalk.yellow(padString("todoer rm <id>", 23)) + " Delete/Remove todo by ID",
   );
-  console.log(chalk.yellow(padString("todoer del", 23)) + " Delete all todos");
-  
-  console.log(chalk.yellow(padString("todoer h", 23)) + " Display the commands");
-  console.log(chalk.yellow(padString("todoer help", 23)) + " Display help for command");
+  console.log(
+    chalk.yellow(padString("todoer del", 23)) +
+      " Delete all todos : bulk delete",
+  );
+
+  console.log(
+    chalk.yellow(padString("todoer h, todoer help", 23)) +
+      " Display all commands",
+  );
 }
 
 const args = process.argv.slice(2);
 
-if (args.includes('--help') || args.includes('help') || args.includes('h') || args.includes('-h')  || args.length === 0) {
-    displayHelp(); // Display the custom help message
-    process.exit(0); // Exit after showing the help message
+if (
+  args.includes("--help") ||
+  args.includes("help") ||
+  args.includes("h") ||
+  args.includes("-h") ||
+  args.length === 0
+) {
+  displayHelp();
+  process.exit(0);
 }
 program.helpOption(false);
 program.parse(process.argv);
