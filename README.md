@@ -24,7 +24,7 @@ The todoer CLI command project is user-friendly command-line interface tool desi
 
     Example:
 
-    bash : `todoer --version`
+    `todoer --version`
 
 ### 4\. **Commands**
 
