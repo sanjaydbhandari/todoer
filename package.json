@@ -15,6 +15,7 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
+    "figlet": "^1.7.0",
     "fs": "^0.0.1-security",
     "inquirer": "^10.2.0",
     "path": "^0.12.7",

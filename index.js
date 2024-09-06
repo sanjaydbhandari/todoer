@@ -75,7 +75,7 @@ const writeTodo = (todo) => {
 
 program
   .command("add")
-  .description("add todos")
+  .description("add todo")
   .action(() => {
     console.log(chalk.grey("Todo List :"));
     listTodos();
@@ -138,8 +138,8 @@ program
 // edit todo ------------------------------------------
 
 program
-  .command("ch <id> <task>")
-  .description("list all todos")
+  .command("-e <id> <task>")
+  .description("Shorthand Edit todo using ID")
   .action((id, task) => {
     const todos = readTodos();
     let edited = false;
@@ -248,7 +248,7 @@ program
   });
 
 program
-  .command("DEL")
+  .command("del")
   .description("Delete all todos")
   .action(() => {
     inquirer
@@ -319,16 +319,16 @@ program
   .command("h")
   .description("display the commands")
   .action(() => {
-    help();
+    displayHelp();
   });
 
 program.on("command:*", () => {
   console.error(chalk.red("Invalid Command!"));
-  helpCommand();
+  displayHelp();
   process.exit(1);
 });
 
-function helpCommand() {
+function displayHelp() {
   console.log("\n");
   console.log(chalk.green(figlet.textSync("Todoer")));
   console.log(chalk.grey("Commands:"));
@@ -343,9 +343,17 @@ function helpCommand() {
   );
   console.log(chalk.yellow(padString("todoer del", 23)) + " Delete all todos");
   console.log(
-    chalk.yellow(padString("todoer ch <id> <task>", 23)) +
+    chalk.yellow(padString("todoer -e <id> <task>", 23)) +
       " ShortHand way to edit todo",
   );
 }
 
+const args = process.argv.slice(2);
+
+if (args.includes('--help') || args.includes('-h') || args.includes(' ')) {
+    displayHelp(); // Display the custom help message
+    process.exit(0); // Exit after showing the help message
+}
+displayHelp();
+program.helpOption(false);
 program.parse(process.argv);
