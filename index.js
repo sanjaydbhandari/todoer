@@ -58,7 +58,7 @@ const listTodos = () => {
 const response = (todo) => {
   let priority ="";
   if(todo.priority == "High") priority=chalk.red("*H*")
-  else if(todo.priority == "Midium") priority=chalk.blue(todo.priority.substring(0, 3));
+  else if(todo.priority == "Medium") priority=chalk.blue(todo.priority.substring(0, 3));
   else priority=todo.priority.substring(0, 3);
    
   if (todo.status == "Completed")
