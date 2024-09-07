@@ -209,13 +209,6 @@ This project is licensed under the MIT License.<br>
 ### Contributing
 Contributions are welcome! Please open an issue or submit a pull request on the [GitHub repository](https://github.com/sanjaydbhandari/todoer.git).
 
-### Keywords:
-`todoer`
-`cli`
-`task`
-`command line`
-`management`
-
 *****
 <center><small>Copyright (c) 2024 Sanjay Bhandari<small></center>
 
