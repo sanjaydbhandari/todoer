@@ -64,7 +64,7 @@ const response = (todo) => {
   if (todo.status == "Completed")
     console.log(
       chalk.green(
-        `[ ${priority} ] [${chalk.green("✔")} ] ${todo.id} : ${todo.task}`,
+        `[ ${priority} ] [${chalk.green("Dn")} ] ${todo.id} : ${todo.task}`,
       ),
     );
   else if (todo.status == "InProgress")
