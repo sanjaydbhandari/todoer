@@ -112,6 +112,15 @@ This project is licensed under the MIT License.
         ```
         <br>
 
+    -   **`get <id>`**: Display todo details by Todo ID.
+
+        Example:
+
+        ```bash
+        todoer get 1
+        ```
+        <br>
+
     -   **`h`**: This likely shows the available commands. It's a shorthand for help.
 
         Example:
@@ -173,8 +182,15 @@ This project is licensed under the MIT License.
      todoer list
     ```
      <br>
+
+8.  **Display Todo Details by ID**:
+
+    ```bash
+     todoer get 1
+    ```
+     <br>
      
-8.  **Display help**:
+9.  **Display help**:
 
     ```bash
     todoer --help
