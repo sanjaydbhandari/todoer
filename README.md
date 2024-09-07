@@ -7,13 +7,6 @@ To install Todoer, run the following command:
 ```bash
 npm install -g todoer
 ```
- 
-### License
-
-This project is licensed under the MIT License.
-
-<br>
-
 
 ### **Usage: todoer [options] [command]**
 * * * * *
@@ -198,8 +191,32 @@ This project is licensed under the MIT License.
     <br>
 
 ### Summary
-
--   The `Usage` section provides the syntax for running the CLI tool.
--   The **Options** are flags like `--version` that give you extra information or modify the behavior.
--   **Commands** are the actual actions you perform with the tool, like `add`, `edit`, `rm` for adding, editing, and removing todos, respectively.
+To explore Todopro CLI tool:
+- **Install Todopro:** Install the CLI globally using npm with `npm install -g todoer`.
+-   **Run Commands:** the actual actions you perform with the tool, like `todoer add`, `todoer edit`,  `todoer ch <id> <task>`, `todoer rm <id>`, `todoer get <id>`, `todoer ls`, `todoer list`, `todoer del` .
 -   **`help`** and `h` commands display detailed usage instructions for specific commands.
+-   The **Options** are flags like `--version` or `-V` that give you extra information or modify the behavior.
+
+### Author
+
+Sanjay Bhandari
+
+
+### License
+
+This project is licensed under the MIT License.<br>
+
+### Contributing
+Contributions are welcome! Please open an issue or submit a pull request on the [GitHub repository](https://github.com/sanjaydbhandari/todoer.git).
+
+### Keywords:
+`todoer`
+`cli`
+`task`
+`command line`
+`management`
+
+*****
+<center>Copyright (c) 2024 Sanjay Bhandari</center>
+
+<br>
