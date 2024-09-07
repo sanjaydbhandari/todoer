@@ -217,6 +217,6 @@ Contributions are welcome! Please open an issue or submit a pull request on the 
 `management`
 
 *****
-<center>Copyright (c) 2024 Sanjay Bhandari</center>
+<center><small>Copyright (c) 2024 Sanjay Bhandari<small></center>
 
 <br>
